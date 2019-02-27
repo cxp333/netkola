@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>登录</title>
+		<link rel="stylesheet" type="text/css" href="../css/common.css" />
+		<link rel="stylesheet" type="text/css" href="../css/dl-zc.css" />
+	</head>
+	<body>
+		<img class="img" src="../images/dl_tou.png" height="104" width="1258" alt="" />
+		<div id="dl_main" style="height: 460px;background-image: url(https://haitao.nos.netease.com/96db8510-65c4-490d-bfdb-cca1d5ab1842_1920_520.jpg?imageView&thumbnail=1920x0&quality=90);;">
+			
+			<div class="dlzhuce" style="margin-left: 800px;background: white;">
+
+				<div class="tou " style="display: inline-block;background: #ECECEC;">
+					<div class="deng sjh fl ">手机号登录</div>
+					<div class="deng yx fl">邮箱登录</div>
+				</div>
+				<div id="dl">
+					<p>
+						<input class="tel" type="text" name="user" id="" value="" placeholder="请输入手机号" />
+					</p>
+					<p>
+						<input class="tel" type="text" name="pass" id="" value="" placeholder="请输入密码" />
+					</p>
+					
+					<!-- <p class="verty">
+						<input  class="c_code_msg" type="text" style="margin-right: 10px;" placeholder="请输入验证码" />
+						<span class="msgs">获取短信验证码</span>
+					</p> -->
+				</div>
+				
+				<button class="dl_btn">登录</button>
+				<p id="msg">
+					
+				</p>
+				<div><input type="checkbox" class="gou" /> 10天免登录<span class="yudao fr">遇到问题？</span></div>
+			</div>
+			
+			</div>
+		</div>
+	</body>
+	<script src="../lib/jquery-1.9.0.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript">
+		$(function() {
+			//获取短信验证码
+			var validCode = true;
+			$(".msgs").click(function() {
+				var time = 30;
+				var code = $(this);
+				if (validCode) {
+					validCode = false;
+					code.addClass("msgs1");
+					var t = setInterval(function() {
+						time--;
+						code.html(time + "秒");
+						if (time == 0) {
+							clearInterval(t);
+							code.html("重新获取");
+							validCode = true;
+							code.removeClass("msgs1");
+
+						}
+					}, 1000)
+				}
+			})
+			class Login{
+			    constructor(){
+			        this.url = "http://www.liyangyf.com/ctrl/login.php";
+			        this.init()
+			    }
+			    init(){
+			        var that = this;
+			        $(".dl_btn").click(function(){
+			            that.load()
+			        })
+			    }
+			    load(){
+			        var that = this;
+			        $.ajax({
+			            url:this.url,
+			            data:{
+			                user:$("#user").val(),
+			                pass:$("#pass").val()
+			            },
+			            success:function(res){
+			                switch(res){
+			                    case "0":
+			                        $("#msg").html("用户名密码不符");
+			                        break;
+			                    case "1":
+			                        $("#msg").html("请重新登录");
+			                        break;
+			                    default:
+			                        that.res = JSON.parse(res);
+			                        $("#msg").html("登录成功");
+			                        that.display()
+			                }
+			            },
+			           
+			        })
+			    }
+			    display(){
+			        console.log(this.res)
+			    }
+			}
+			
+			
+			new Login()
+		})
+	</script>
+</html>
